@@ -1,0 +1,61 @@
+\documentclass[justified, nofonts, notitlepage, openany]{tufte-book}
+
+%%% Sets numbering depth to section level (e.g, no numbered subsections)
+\setcounter{secnumdepth}{1}
+
+\usepackage{notes}
+\geometry{left=1in, right=3in,top = 1in, bottom=1in}
+
+%%% Removes paragraph indentation and changes paragraph line skip
+\makeatletter
+\renewcommand{\@tufte@reset@par}{%
+  \setlength{\RaggedRightParindent}{0pc}%
+  \setlength{\JustifyingParindent}{0pc}%
+  \setlength{\parindent}{0pc}%
+  \setlength{\parskip}{12pt}%
+}
+\@tufte@reset@par
+\makeatother
+
+
+\begin{document}
+%%% The Title and Author only need to be set once at the start of the document. If you take notes for multiple courses in the same document (for example, in a multi-semester sequence for the same course), you can separate the courses with a new Part, and the semester, lecturer, and course only need to be set once at the start of the new course.
+\title{Math 254: Algebraic Number Theory}
+\author{Abhishek Shivkumar}
+
+\part{Non-Riemannian Hypersquares}
+\semester{Fall 2020}
+\lecturer{Alexander Grothendieck}
+\course{Math 256C: From Schemes to Machinations}
+
+\chapter{Lecture 1: 26 August}
+\section{Tutorial}
+
+Here is where lecture content goes, generally a summary or transcription of what is being said or written. Here is a theorem:
+\begin{theorem}[Kontsevich]
+    The number $N_d$ of rational plane curves of degree $d$ passing through $3d-1$ points in general position is given recursively by $$N_d = \sum_{d_A + d_B = d} N_{d_A} N_{d_B} d_A^2 d_B\left(d_B\binom{3d-4}{3d_A -2} - d_A \binom{3d-4}{3d_A-1}\right)$$
+\end{theorem}
+\marginnote{Here is a margin note: note that the above result was only obtained in the early 1990s, using ideas from theoretical physics.}
+
+The above result, is, of course, thoroughly unrelated to the following fact:
+\begin{lemma}
+    In a $k$-free graph on $n$ vertices, there are at most $\binom{k-1}{r} (\frac{n}{k-1})^r$ $r$-cliques.
+\end{lemma}
+Setting $r=2$ in the above, we recover the following result:
+\begin{corollary}[Turan's Theorem][hereyouputthetagforreferences]
+    In a $k$-free graph on $n$ vertices, there are at most $\frac{k-2}{k-1} \frac{n^2}{2}$ edges. 
+\end{corollary}
+\marginnote{Note that this upper bound can be mildly strengthened into a strict upper bound by considering the different cases for $n$ modulo $k-1$. In particular, if $r$ is the remainder when $n$ is divided by $k-1$, then the upper bound on edges is $$\frac{k-2}{k-1}\frac{n^2 - r^2}{2} + \binom{r}{2}$$ and $k$-free graphs with precisely that many edges can be straightforwardly constructed.}
+You can reference any theorem box if you add a reference tag (see the $\LaTeX$ code at Corollary~\ref{cor:hereyouputthetagforreferences} for formatting, and see the style file for the reference prefixes for each theorem style).
+
+Unnnumbered versions of all the theorem boxes exist:
+\begin{proposition*}[Hurwitz][hurwitz]
+    The group of orientation-preserving conformal automorphisms of a compact Riemann surface of genus $g > 1$ has order at most $84(g-1)$.
+\end{proposition*}
+\marginnote{References do not work for unnumbered theorems.}
+\begin{proof}
+    There is also a proof environment.
+\end{proof}
+
+
+\end{document}
