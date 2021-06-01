@@ -1,6 +1,6 @@
 *.pre
 *.synctex.zg
 *.aux
-*.DS_store
+.DS_store
 *.out
 *.log
