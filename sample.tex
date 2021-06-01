@@ -57,5 +57,96 @@ Unnnumbered versions of all the theorem boxes exist:
     There is also a proof environment.
 \end{proof}
 
+Some miscellaneous things:
+\begin{center}
+\begin{tikzpicture}[tqft/cobordism/.style={draw},
+        tqft/view from=outgoing, tqft/boundary separation=30pt,
+        tqft/cobordism height=40pt, tqft/circle x radius=8pt,
+        tqft/circle y radius=3pt, tqft/every boundary component/.style={draw,rotate=90}]
+
+        \pic[tqft/cylinder,rotate=90,name=a,anchor={(1,0)}];
+        \pic[tqft,
+            incoming boundary components=0,
+            outgoing boundary components=2,
+            rotate=90,name=b,anchor={(0,0)}];
+        \pic[tqft,
+            incoming boundary components=2,
+            outgoing boundary components=0,
+            rotate=90,name=c,at=(a-outgoing boundary)];
+        \pic[tqft/cylinder,rotate=90,name=d,at=(b-outgoing boundary 2)];
+        \node at ([xshift=-11pt,yshift = -65pt]b-between outgoing 1 and 2) {$(\varphi \sqcup \id_{\overline{E}}) \hspace{1pt}\circ$};
+        \node at ([xshift=+12pt,yshift = -35pt]c-between incoming 1 and 2) {$(\id_{\overline{E}} \sqcup \hspace{1pt}\psi)$};
+        \node[pin=20:$E$] at (c-incoming boundary 2) {};
+        \node at ([xshift=-10pt]a-incoming boundary 1) {$\overline{E}$};
+        \node at ([xshift=10pt]d-outgoing boundary) {$\overline{E}$};
+
+        \path (b-outgoing boundary 1) ++(2,-.3) node[font=\LARGE] {\(=\)};
+
+        \pic[tqft/cylinder,rotate=90,name=e,anchor={(.3,-3)}];
+        \pic[tqft/cylinder,rotate=90,name=f,at=(e-outgoing boundary)];
+        \pic[tqft/cylinder,rotate=90,name=g,at=(f-outgoing boundary)];
+        \pic[tqft/cylinder,rotate=90,name=h,at=(g-outgoing boundary)];
+        
+        \node at ([yshift = -20pt]f-outgoing boundary) {$\id_{\overline{E}}$};
+
+\end{tikzpicture} 
+\end{center}
+
+\marginnote{Associativity of the product arising from a 2D TQFT.}
+\begin{center}
+\begin{tikzpicture}[tqft/cobordism/.style={draw},
+         tqft/view from=outgoing, tqft/boundary separation=40pt,
+         tqft/cobordism height=40pt, tqft/circle x radius=8pt,
+         tqft/circle y radius=3pt, tqft/every boundary component/.style={draw,rotate=90}]
+
+         \pic[tqft/reverse pair of pants,draw,rotate=90,name=a];
+         \pic[tqft/reverse pair of pants,draw,rotate=90,name=c,anchor=outgoing boundary, at=(a-incoming boundary 1)];
+         \pic[tqft/cylinder to prior,draw,rotate=90,name=d,anchor=outgoing boundary, at=(a-incoming boundary 2)];
+
+         \path (a-outgoing boundary) ++(1,0) node[font=\LARGE] {\(\cong\)};
+
+         \pic[tqft/reverse pair of pants,draw,rotate=90,name=b,anchor=outgoing boundary, at=(a-outgoing boundary), yshift=-140pt];
+         \pic[tqft/reverse pair of pants,draw,rotate=90,name=e,anchor=outgoing boundary, at=(b-incoming boundary 2)];
+         \pic[tqft/cylinder to next,draw,rotate=90,name=f,anchor=outgoing boundary, at=(b-incoming boundary 1)];
+
+         \node at ([xshift=-10pt]d-incoming boundary) {$a$};
+         \node at ([xshift=-10pt,yshift=2pt]d-outgoing boundary) {$a$};
+         \node at ([xshift=-10pt]c-incoming boundary 2) {$b$};
+         \node at ([xshift=-10pt]c-incoming boundary 1) {$c$};
+
+         \node[pin=-90:$b*c$] at (c-outgoing boundary) {};
+         \node[pin=-90:$a*(b*c)$] at (a-outgoing boundary) {};         
+
+         \node at ([xshift=-10pt]e-incoming boundary 2) {$a$};
+         \node at ([xshift=-10pt]e-incoming boundary 1) {$b$};
+         \node[pin=90:$a*b$] at (e-outgoing boundary) {};
+
+         \node at ([xshift=-10pt]f-incoming boundary) {$c$};
+         \node at ([xshift=-10pt,yshift=-2pt]f-outgoing boundary) {$c$};
+
+         \node[pin=-90:$(a*b)*c$] at (b-outgoing boundary) {};         
+
+
+\end{tikzpicture}
+\end{center}
+\marginnote{Diagrammatic arguments for two-dimensional TQFTs often rely on this strategy of placing vectors at boundary components and using the fact that morphisms in $\cob_n$ are only defined up to diffeomorphisms to prove identities in $Z(S^1)$.}
+
+Using \texttt{https://q.uiver.app/} (whose style file is included in our style file for convenience), we can curve arrows more flexibly in commutative diagrams than tikz-cd normally allows:
+\[\begin{tikzcd}
+    & {\PP^n \setminus \{Q\}} & {W_0} \\
+    X & {\PP^n \setminus V} & {W_0\setminus V'} & W
+    \arrow["{\varphi_0}", from=1-2, to=1-3]
+    \arrow[from=2-2, to=1-2]
+    \arrow["{\varphi_0|_{\PP^n \setminus V}}", from=2-2, to=2-3]
+    \arrow["{\varphi'}", from=2-3, to=2-4]
+    \arrow[hook, from=2-1, to=1-2]
+    \arrow[hook, from=2-1, to=2-2]
+    \arrow[hook, from=2-3, to=1-3]
+    \arrow["\varphi"', curve={height=12pt}, from=2-1, to=2-4]
+\end{tikzcd}\]
+
+\begin{question}
+    Are these diagrams really necessary to include in a sample file?
+\end{question}
 
 \end{document}
