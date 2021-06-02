@@ -14,4 +14,4 @@ Style file for Tufte-style notes in LaTeX, intended for Live-TeXing during a lec
 
 The theorem boxes are colored with Berkeley's official colors. 
 
-![sample page](https://github.com/ultravioletcatastrophe/Latex-Notes-Template/blob/40987e16533029127db1922cbbc0f28476db6ada/sample.png)
+![sample page](https://github.com/ultravioletcatastrophe/Latex-Notes-Template/blob/cb4e59fa5227a6b38c4e5c50538ca53c59d9163c/sample.png)
