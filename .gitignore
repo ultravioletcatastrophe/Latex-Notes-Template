@@ -1,5 +1,5 @@
 *.pre
-*.synctex.gz
+*.gz
 *.aux
 .DS_Store
 *.out
