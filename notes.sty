@@ -7,7 +7,6 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{xcolor}
 \RequirePackage{soul}
-\RequirePackage{amsthm}
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 \RequirePackage[pdftex]{graphicx}
@@ -24,7 +23,10 @@
 \RequirePackage{xparse}
 \RequirePackage{changepage}
 \RequirePackage{multicol}
-\RequirePackage{marginfix} %moves marginnotes around so that they don't go off page.
+% \RequirePackage{marginfix} %moves marginnotes around so that they don't go off page. omitted for now because it seems to have some kind of bad interaction with \cite
+\RequirePackage{longtable} %allows tables to break across pages
+\RequirePackage[amsmath, thmmarks]{ntheorem}
+\RequirePackage{dynkin-diagrams}
 
 % *** quiver ***
 % A package for drawing commutative diagrams exported from https://q.uiver.app.
@@ -32,10 +34,11 @@
 % This package is currently a wrapper around the `tikz-cd` package, importing necessary TikZ
 % libraries, and defining a new TikZ style for curves of a fixed height.
 %
-% Version: 1.1.0
+% Version: 1.2.2
 % Authors:
 % - varkor (https://github.com/varkor)
 % - AndréC (https://tex.stackexchange.com/users/138900/andr%C3%A9c)
+
 % A TikZ style for curved arrows of a fixed height, due to AndréC.
 \tikzset{curve/.style={settings={#1},to path={(\tikztostart)
     .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
@@ -52,7 +55,7 @@
 % TikZ arrow styles.
 \tikzset{no body/.style={/tikz/dash pattern=on 0 off 1mm}}
 
-% My shortcuts, delete if you're not me
+% My shortcuts, probably can get rid of these if you are not me
 \newcommand{\im}{\operatorname{Im}}
 \newcommand{\re}{\operatorname{Re}}
 \newcommand{\NN}{\mathbb{N}}
@@ -111,12 +114,12 @@
 \newcommand{\codim}{\operatorname{codim}}
 
 
-% Berkeley Colors!!!
-\definecolor{BerkeleyBlue}{HTML}{003262}
-\definecolor{FoundersRock}{HTML}{3B7EA1}
-\definecolor{CaliforniaGold}{HTML}{FDB515}
-\definecolor{Medalist}{HTML}{C4820E}
-%\definecolor{CaliforniaPurple}{HTML}{5C3160}
+%Color Scheme
+\definecolor{Main}{HTML}{BF5700}
+\definecolor{Accent1}{HTML}{f8971f}
+\definecolor{Accent2}{HTML}{005f86}
+% \definecolor{Accent3}{HTML}{7F6C89} %too many colors
+% \definecolor{Accent4}{HTML}{669890}
 
 % Theorems
 \tcbuselibrary{skins}
@@ -126,18 +129,19 @@
 \g@addto@macro\bfseries{\boldmath} %math is in bold when surrounding text is in bold. for theorem labels.
 
 \newtcbtheorem[number within=subsection,
-    %number freestyle={\noexpand\thesection.\noexpand\thesubsection.\noexpand\Roman{\tcbcounter}} %for revtex
+    %number freestyle={\noexpand\thesection.\noexpand\thesubsection.\noexpand\Roman{\tcbcounter}} %for use with revtex
     number freestyle={\noexpand\thesection.\noexpand\arabic{\tcbcounter}} %for tufte
     ]{olddefinition}{\vphantom{Apgjy}Definition}{breakable, 
     parbox=false,
     sharp corners, 
     skin=enhanced, 
     frame hidden, 
-    colback=CaliforniaGold!25, 
+    colback=Accent2!0, 
     coltitle=white, 
-    colbacktitle=CaliforniaGold, 
+    colbacktitle=Accent2, 
     adjusted title,
-    %titlerule=0mm, 
+    % titlerule=0mm, 
+    borderline={.5mm}{0mm}{Accent2},
     fonttitle=\bfseries}{def}
 
 \NewDocumentEnvironment{definition}{O{} O{}}
@@ -151,12 +155,12 @@
     sharp corners, 
     skin=enhanced, 
     frame hidden, 
-    colback=#3!25, 
+    colback=#3!0, 
     coltitle=white, 
     colbacktitle=#3,
-    %titlerule=0mm, %for no gap between title and box
+    % titlerule=0mm, %for no gap between title and box
     %before upper={\parindent15pt}, %for paragraph indents in each box
-    %borderline={1mm}{0mm}{#3},
+    borderline={.5mm}{0mm}{#3},
     fonttitle=\bfseries
     }{#4}
     \NewDocumentEnvironment{#1}{O{} O{}}
@@ -169,26 +173,24 @@
 }
 
 %\wraptheorem{environment name}{word that is displayed at top of env}{color}{abbreviation for ref}
-\wraptheorem{theorem}{Theorem}{CaliforniaGold}{th}
-\wraptheorem{lemma}{Lemma}{FoundersRock}{lem}
-\wraptheorem{corollary}{Corollary}{Medalist}{cor}
-\wraptheorem{proposition}{Proposition}{BerkeleyBlue}{prop}
-%\wraptheorem{definition}{Definition}{CaliforniaGold}{def}
-\wraptheorem{example}{Example}{Medalist}{ex}
-\wraptheorem{exercise}{Exercise}{BerkeleyBlue}{exer}
-\wraptheorem{remark}{Remark}{BerkeleyBlue}{rem}
-\wraptheorem{definition-proposition}{Definition-Proposition}{BerkeleyBlue}{def-prop}
-\wraptheorem{conjecture}{Conjecture}{FoundersRock}{conj}
-\wraptheorem{question}{Question}{BerkeleyBlue}{q}
+\wraptheorem{theorem}{Theorem}{Main}{th}
+\wraptheorem{lemma}{Lemma}{Accent1}{lem}
+\wraptheorem{corollary}{Corollary}{Accent2}{cor}
+\wraptheorem{proposition}{Proposition}{Main}{prop}
+%\wraptheorem{definition}{Definition}{Accent2}{def} %already done above
+\wraptheorem{example}{Example}{Accent1}{ex}
+\wraptheorem{exercise}{Exercise}{Accent2}{exer}
+\wraptheorem{remark}{Remark}{Main}{rem}
+\wraptheorem{conjecture}{Conjecture}{Main}{conj}
+\wraptheorem{question}{Question}{Accent1}{q}
 % Use case:
 % \begin{definition}[What is to be defined][label]
 % ---
 % \end{definition}
 % ~\ref{def:label}
 
-\renewenvironment{proof}{\textbf{Proof:}}{\hfill$\blacksquare$ \par}
 \let\oldmarginnote\marginnote
-\renewcommand{\marginnote}[1]{\oldmarginnote{\parindent=0pt \parskip=7pt #1}}
+\renewcommand{\marginnote}[1]{\oldmarginnote{\parindent=0pt \parskip=7pt #1}} %no paragraph indents in marginnotes
 
 % Section Titles
 \let\oldsection\section
@@ -196,16 +198,28 @@
 \let\oldsubsubsection\subsubsection
 
 \titleformat{\section}
-    {\Large \rmfamily} %format of label and text
+    {\LARGE \rmfamily} %format of label and text
     {} %label
     {0pt} %horizontal separation between label and title body
     {} %before the title body
     [] %after the title body
 \titlespacing{\section}
-    {0pt} %left
+    {-.5in} %left
     {.25in} %above
     {.25in} %below
     [0pt] %right
+
+\titleformat{\subsection}
+    {\Large \rmfamily}
+    {\thesubsection \enspace}
+    {0pt}
+    {}
+    []
+\titlespacing{\subsection}
+    {-.5in}
+    {0in}
+    {0in}
+    [0pt]
 
 \newcommand{\formatpart}[1]{%
     \begin{fullwidth}
@@ -228,6 +242,7 @@
 
 \renewcommand\title[1]{%
     \newcommand\thetitle{#1}%
+    \newcommand\thebackuptitle{#1} %for reasons beyond my capacity or willpower to understand, \thetitle gets overwritten with the chapter.section number, so defining this allows the chapter headings to keep the original title
     \oldtitle{#1}%
 }
 \renewcommand\author[1]{%
@@ -252,32 +267,45 @@
 \renewcommand\maketitle{\sffamily\oldmaketitle\rmfamily}
 
 %Chapter headings:
-\def\@course{None}
-\newcommand{\course}[1]{\def\@course{#1}}
-\newcommand{\show@course}{\@course}
-
-\def\@lecturer{None}
+\def\@lecturer{}
 \newcommand{\lecturer}[1]{\def\@lecturer{#1}}
-\newcommand{\show@lecturer}{\@lecturer}
 
-\def\@semester{None}
+\def\@semester{}
 \newcommand{\semester}[1]{\def\@semester{#1}}
-\newcommand{\show@semester}{\@semester}
 
+\setlength{\fboxrule}{.5mm} %resize framebox thickness to theorem box frame thickness (more consistent design language), default is .2pt
 \renewcommand{\chapter}[1]{%format adapted from template for lecture notes from CS 267, Applications of Parallel Computing, UC Berkeley EECS department
     \newpage
     \noindent
     \begin{center}
         \framebox{
             \vbox{\vspace{2mm}
-                \hbox to 6.28in { {\bf \show@course
-                        \hfill \show@semester} }
+                \hbox to 6.28in { {\bf \thebackuptitle
+                        \hfill \@semester} }
                 \vspace{4mm}
                 \hbox to 6.28in { {\LARGE \hfill #1 \hfill} }
                 \vspace{2mm}
-                \hbox to 6.28in { {\sc Professor \show@lecturer \hfill \theauthor} }
+                \hbox to 6.28in { {\sc \@lecturer \hfill \theauthor} }
                 \vspace{2mm}}
         }
     \end{center}
     \stepcounter{chapter}
 }
+
+
+\newenvironment{twocol}{\begin{fullwidth}\begin{multicols}{2}}{\end{multicols}\end{fullwidth}} %new twocolumn fullwidth environment, mostly for spamming a bunch of examples after a theorem or something like that, since the margins generally don't get used when we're doing a bunch of examples in a row
+
+\makeatletter %left margin proof environment
+\newtheoremstyle{proof}%
+{\item[\theorem@headerfont \llap{##1 \theorem@separator}]}%
+{\item[\theorem@headerfont \llap{##3 \theorem@separator}]}%opt-head, so if you do \begin{proof}[foo] the Proof: is replaced with foo:
+\makeatother
+
+% \renewenvironment{proof}{\par\textbf{Proof:}}{\hfill\ensuremath{\blacksquare} \par} %old hacky proof environment; switching to ntheorem gives better alignment of \blacksquare, especially when the proof ends with a displayed formula; unfortunately, this means you have to bend the knee to the tex.stackexchange gestapo and replace your $$ $$s with \[ \]s (anticipate ~five fewer usable years for your right pinky)
+
+\theoremstyle{proof}
+\theoremheaderfont{\sc \large}
+\theorembodyfont{\upshape}
+\theoremseparator{:}
+\theoremsymbol{\ensuremath{\blacksquare}}
+\newtheorem{proof}{Proof}

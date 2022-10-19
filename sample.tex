@@ -1,4 +1,4 @@
-\documentclass[justified, nofonts, notitlepage, openany]{tufte-book}
+\documentclass[justified, nofonts, notitlepage, openany, debug]{tufte-book}
 
 %%% Sets numbering depth to section level (e.g, no numbered subsections)
 \setcounter{secnumdepth}{1}
@@ -17,25 +17,28 @@
 \@tufte@reset@par
 \makeatother
 
+\def\bibsection{\section*{\refname}} %ensures that the references show up as an unnumbered section
 
 \begin{document}
 %%% The Title and Author only need to be set once at the start of the document. If you take notes for multiple courses in the same document (for example, in a multi-semester sequence for the same course), you can separate the courses with a new Part, and the semester, lecturer, and course only need to be set once at the start of the new course.
-\title{Math 254: Algebraic Number Theory}
+\title{Math 256C: From Schemes to Machinations}
 \author{Abhishek Shivkumar}
 
 \part{Non-Riemannian Hypersquares}
 \semester{Fall 2020}
-\lecturer{Alexander Grothendieck}
-\course{Math 256C: From Schemes to Machinations}
+\lecturer{Professor Alexander Grothendieck}
 
 \chapter{Lecture 1: 26 August}
 \section{Tutorial}
+\subsection{Basics}
 
 Here is where lecture content goes, generally a summary or transcription of what is being said or written. Here is a theorem:
 \begin{theorem}[Kontsevich]
     The number $N_d$ of rational plane curves of degree $d$ passing through $3d-1$ points in general position is given recursively by $$N_d = \sum_{d_A + d_B = d} N_{d_A} N_{d_B} d_A^2 d_B\left(d_B\binom{3d-4}{3d_A -2} - d_A \binom{3d-4}{3d_A-1}\right)$$
 \end{theorem}
-\marginnote{Here is a margin note: note that the above result was only obtained in the early 1990s, using ideas from theoretical physics.}
+\marginnote{Here is a margin note: I use these generally to annotate my own thoughts or questions during lecture. If used for producing some kind of document with external consumption in mind, margin notes are good for imparting intuition and introducing individual, idiosyncratic, and informal, but, illuminating and illustrative ideologies.
+
+You can have multi-paragraph margin notes, which are configured to not have indented paragraphs.}
 
 The above result, is, of course, thoroughly unrelated to the following fact:
 \begin{lemma}
@@ -45,93 +48,20 @@ Setting $r=2$ in the above, we recover the following result:
 \begin{corollary}[Turan's Theorem][hereyouputthetagforreferences]
     In a $k$-free graph on $n$ vertices, there are at most $\frac{k-2}{k-1} \frac{n^2}{2}$ edges. 
 \end{corollary}
-\marginnote{Note that this upper bound can be mildly strengthened into a strict upper bound by considering the different cases for $n$ modulo $k-1$. In particular, if $r$ is the remainder when $n$ is divided by $k-1$, then the upper bound on edges is $$\frac{k-2}{k-1}\frac{n^2 - r^2}{2} + \binom{r}{2}$$ and $k$-free graphs with precisely that many edges can be straightforwardly constructed.}
-You can reference any theorem box if you add a reference tag (see the $\LaTeX$ code at Corollary~\ref{cor:hereyouputthetagforreferences} for formatting, and see the style file for the reference prefixes for each theorem style).
+You can insert a hyperlinked reference for any theorem box if you add a reference tag (see the \LaTeX\ code at Corollary~\ref{cor:hereyouputthetagforreferences} for formatting, and see the style file for the reference prefixes for each theorem style).
+\begin{proof}
+    There is also a proof environment; the proof heading is configured to live in the left margin.
+\end{proof}
 
-Unnnumbered versions of all the theorem boxes exist:
+Citations live in the right margin~\cite{hartshorne}, but will not work correctly if placed inside a theorem box. The available theorem boxes are \texttt{theorem}, \texttt{lemma}, \texttt{corollary}, \texttt{proposition}, \texttt{definition}, \texttt{example}, \texttt{remark}, \texttt{question}, \texttt{exercise}, and \texttt{conjecture}. Unnnumbered versions of all the theorem boxes exist:
 \begin{proposition*}[Hurwitz]
     The group of orientation-preserving conformal automorphisms of a compact Riemann surface of genus $g > 1$ has order at most $84(g-1)$.
 \end{proposition*}
 \marginnote{References do not work for unnumbered theorems.}
-\begin{proof}
-    There is also a proof environment.
-\end{proof}
 
-Some miscellaneous things:
-\begin{center}
-\begin{tikzpicture}[tqft/cobordism/.style={draw},
-        tqft/view from=outgoing, tqft/boundary separation=30pt,
-        tqft/cobordism height=40pt, tqft/circle x radius=8pt,
-        tqft/circle y radius=3pt, tqft/every boundary component/.style={draw,rotate=90}]
-
-        \pic[tqft/cylinder,rotate=90,name=a,anchor={(1,0)}];
-        \pic[tqft,
-            incoming boundary components=0,
-            outgoing boundary components=2,
-            rotate=90,name=b,anchor={(0,0)}];
-        \pic[tqft,
-            incoming boundary components=2,
-            outgoing boundary components=0,
-            rotate=90,name=c,at=(a-outgoing boundary)];
-        \pic[tqft/cylinder,rotate=90,name=d,at=(b-outgoing boundary 2)];
-        \node at ([xshift=-11pt,yshift = -65pt]b-between outgoing 1 and 2) {$(\varphi \sqcup \id_{\overline{E}}) \hspace{1pt}\circ$};
-        \node at ([xshift=+12pt,yshift = -35pt]c-between incoming 1 and 2) {$(\id_{\overline{E}} \sqcup \hspace{1pt}\psi)$};
-        \node[pin=20:$E$] at (c-incoming boundary 2) {};
-        \node at ([xshift=-10pt]a-incoming boundary 1) {$\overline{E}$};
-        \node at ([xshift=10pt]d-outgoing boundary) {$\overline{E}$};
-
-        \path (b-outgoing boundary 1) ++(2,-.3) node[font=\LARGE] {\(=\)};
-
-        \pic[tqft/cylinder,rotate=90,name=e,anchor={(.3,-3)}];
-        \pic[tqft/cylinder,rotate=90,name=f,at=(e-outgoing boundary)];
-        \pic[tqft/cylinder,rotate=90,name=g,at=(f-outgoing boundary)];
-        \pic[tqft/cylinder,rotate=90,name=h,at=(g-outgoing boundary)];
-        
-        \node at ([yshift = -20pt]f-outgoing boundary) {$\id_{\overline{E}}$};
-
-\end{tikzpicture} 
-\end{center}
-
-\marginnote{Associativity of the product arising from a 2D TQFT.}
-\begin{center}
-\begin{tikzpicture}[tqft/cobordism/.style={draw},
-         tqft/view from=outgoing, tqft/boundary separation=40pt,
-         tqft/cobordism height=40pt, tqft/circle x radius=8pt,
-         tqft/circle y radius=3pt, tqft/every boundary component/.style={draw,rotate=90}]
-
-         \pic[tqft/reverse pair of pants,draw,rotate=90,name=a];
-         \pic[tqft/reverse pair of pants,draw,rotate=90,name=c,anchor=outgoing boundary, at=(a-incoming boundary 1)];
-         \pic[tqft/cylinder to prior,draw,rotate=90,name=d,anchor=outgoing boundary, at=(a-incoming boundary 2)];
-
-         \path (a-outgoing boundary) ++(1,0) node[font=\LARGE] {\(\cong\)};
-
-         \pic[tqft/reverse pair of pants,draw,rotate=90,name=b,anchor=outgoing boundary, at=(a-outgoing boundary), yshift=-140pt];
-         \pic[tqft/reverse pair of pants,draw,rotate=90,name=e,anchor=outgoing boundary, at=(b-incoming boundary 2)];
-         \pic[tqft/cylinder to next,draw,rotate=90,name=f,anchor=outgoing boundary, at=(b-incoming boundary 1)];
-
-         \node at ([xshift=-10pt]d-incoming boundary) {$a$};
-         \node at ([xshift=-10pt,yshift=2pt]d-outgoing boundary) {$a$};
-         \node at ([xshift=-10pt]c-incoming boundary 2) {$b$};
-         \node at ([xshift=-10pt]c-incoming boundary 1) {$c$};
-
-         \node[pin=-90:$b*c$] at (c-outgoing boundary) {};
-         \node[pin=-90:$a*(b*c)$] at (a-outgoing boundary) {};         
-
-         \node at ([xshift=-10pt]e-incoming boundary 2) {$a$};
-         \node at ([xshift=-10pt]e-incoming boundary 1) {$b$};
-         \node[pin=90:$a*b$] at (e-outgoing boundary) {};
-
-         \node at ([xshift=-10pt]f-incoming boundary) {$c$};
-         \node at ([xshift=-10pt,yshift=-2pt]f-outgoing boundary) {$c$};
-
-         \node[pin=-90:$(a*b)*c$] at (b-outgoing boundary) {};         
-
-
-\end{tikzpicture}
-\end{center}
-\marginnote{Diagrammatic arguments for two-dimensional TQFTs often rely on this strategy of placing vectors at boundary components and using the fact that morphisms in $\cob_n$ are only defined up to diffeomorphisms to prove identities in $Z(S^1)$.}
-
-Using \texttt{https://q.uiver.app/} (whose style file is included in our style file for convenience), we can curve arrows more flexibly in commutative diagrams than tikz-cd normally allows:
+\subsection{Advanced}
+\marginnote{Theorem box numbering is not affected by subsection; this is set by \texttt{secnumdepth} at the top of the preamble.}
+Using \texttt{https://q.uiver.app/} (whose style file is included in our style file for convenience), we can curve arrows more flexibly in commutative diagrams than \texttt{tikz-cd} normally allows:
 \[\begin{tikzcd}
     & {\PP^n \setminus \{Q\}} & {W_0} \\
     X & {\PP^n \setminus V} & {W_0\setminus V'} & W
@@ -145,8 +75,18 @@ Using \texttt{https://q.uiver.app/} (whose style file is included in our style f
     \arrow["\varphi"', curve={height=12pt}, from=2-1, to=2-4]
 \end{tikzcd}\]
 
-\begin{question}
-    Are these diagrams really necessary to include in a sample file?
-\end{question}
+Finally, there is (in addition to the default environments provided by \texttt{tufte-book}) a two-column environment, which I mostly use to spam examples after a big theorem:
+\begin{twocol}
+\begin{example}
+    In $\CC \PP^2$ with its canonical orientation as a complex manifold, we have $H^2 = H_2 = \ZZ$. Lines $L$ in $\CC \PP^2$ are embedded copies of $\CC \PP^1 = S^2$, with a single fundamental class $[L] \in H_2$ representing any such line. To compute the self-intersection $[L] \cdot [L]$, choose two representatives $L$ and $L'$ which intersect transversely (in a point, by basic intersection theory); since $\CC \PP^1$ is canonically oriented as well, and the orientations of $L$ and $L'$ agree with that of $\CC \PP^2$ (since they are subspaces of $\CC \PP^2$), we have that $[L] \cdot [L] = 1$. 
+\end{example}
+\begin{example}
+    In $S^2 \times S^2$, the second homology group is $\ZZ^2$, generated by $h = [S^2 \times \{x\}]$ and $v = [\{x\} \times S^2]$. $S^2 \times \{x\}$ and $\{x\} \times S^2$ intersect transversely at $(x,x)$, and, regarding $S^2$ with its canonical orientation as a complex manifold ($\CC \PP^1$), the orientations agree to give $h \cdot v = 1$. To compute $h \cdot h$, intersect representatives $S^2 \times \{x\}$ and $S^2 \times \{y\}$ for $x \neq y$, from which it is set-theoretically clear that $h^2 = 0$ (and similarly for $v$). Thus, the intersection form as a matrix in the basis $(h,v)$ can be written as $\begin{psmallmatrix} 0 & 1 \\ 1 & 0 \end{psmallmatrix}$ This intersection form is therefore \textit{even}, meaning that for any $k = ah+bv$, $k \cdot k = 2ab$ is even.
+\end{example}
+\end{twocol}
 
+\nocite{*} %Print all references, even those never cited in the body
+
+\bibliographystyle{abbrvnat}
+\bibliography{sample}
 \end{document}
