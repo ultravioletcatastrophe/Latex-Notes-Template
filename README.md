@@ -12,6 +12,4 @@ This work is licensed under a
 
 Style file for Tufte-style notes in LaTeX, intended for Live-TeXing during a lecture. The main body of the text roughly corresponds to the actual content of the lecture, and marginnotes are used to write down questions about the lecture, comments, intuitive descriptions of technical definitions, etc. These two parallel tracks of discussion mirror my preferred style of math pedagogy, with alternating technical and intuitive discussions.
 
-The theorem boxes are colored with Berkeley's official colors. 
-
 ![sample page](https://github.com/ultravioletcatastrophe/Latex-Notes-Template/blob/cb4e59fa5227a6b38c4e5c50538ca53c59d9163c/sample.png)
