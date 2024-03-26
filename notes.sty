@@ -4,13 +4,11 @@
 % Packages
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
-\RequirePackage{fancyhdr}
 \RequirePackage{xcolor}
 \RequirePackage{soul}
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 \RequirePackage[pdftex]{graphicx}
-\RequirePackage{asymptote}
 \RequirePackage{etoolbox}
 \RequirePackage{tcolorbox}
 \RequirePackage{tikz-cd}
@@ -23,95 +21,21 @@
 \RequirePackage{xparse}
 \RequirePackage{changepage}
 \RequirePackage{multicol}
-% \RequirePackage{marginfix} %moves marginnotes around so that they don't go off page. omitted for now because it seems to have some kind of bad interaction with \cite
+\RequirePackage{marginfix} %moves marginnotes around so that they don't go off page. in the past this had some bad interactions with \cite
 \RequirePackage{longtable} %allows tables to break across pages
 \RequirePackage[amsmath, thmmarks]{ntheorem}
 \RequirePackage{dynkin-diagrams}
+\RequirePackage{quiver}
+\RequirePackage{hyphenat} %hyphenation
+\RequirePackage[style=authortitle-ibid,autocite=footnote,backend=biber]{biblatex}
+\RequirePackage[graphicx]{realboxes}
+\RequirePackage{adjustbox}
 
-% *** quiver ***
-% A package for drawing commutative diagrams exported from https://q.uiver.app.
-%
-% This package is currently a wrapper around the `tikz-cd` package, importing necessary TikZ
-% libraries, and defining a new TikZ style for curves of a fixed height.
-%
-% Version: 1.2.2
-% Authors:
-% - varkor (https://github.com/varkor)
-% - AndréC (https://tex.stackexchange.com/users/138900/andr%C3%A9c)
-
-% A TikZ style for curved arrows of a fixed height, due to AndréC.
-\tikzset{curve/.style={settings={#1},to path={(\tikztostart)
-    .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
-    and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
-    .. (\tikztotarget)\tikztonodes}},
-    settings/.code={\tikzset{quiver/.cd,#1}
-        \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}},
-    quiver/.cd,pos/.initial=0.35,height/.initial=0}
-
-% TikZ arrowhead/tail styles.
-\tikzset{tail reversed/.code={\pgfsetarrowsstart{tikzcd to}}}
-\tikzset{2tail/.code={\pgfsetarrowsstart{Implies[reversed]}}}
-\tikzset{2tail reversed/.code={\pgfsetarrowsstart{Implies}}}
-% TikZ arrow styles.
-\tikzset{no body/.style={/tikz/dash pattern=on 0 off 1mm}}
-
-% My shortcuts, probably can get rid of these if you are not me
-\newcommand{\im}{\operatorname{Im}}
-\newcommand{\re}{\operatorname{Re}}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\QQ}{\mathbb{Q}}
-\newcommand{\FF}{\mathbb{F}}
-\newcommand{\Aff}{\mathbb{A}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\EE}{\mathbb{E}}
-\newcommand{\II}{\mathbb{I}}
-\newcommand{\F}{\mathcal{F}}
-\newcommand{\g}{\mathfrak{g}}
-\newcommand{\Var}{\operatorname{Var}}
-\newcommand{\maxspec}{\operatorname{Max Spec}}
-\newcommand{\spec}{\operatorname{Spec}}
-\newcommand{\Hom}{\operatorname{Hom}}
-\newcommand{\Tor}{\operatorname{Tor}}
-\newcommand{\Ext}{\operatorname{Ext}}
-\newcommand{\id}{\operatorname{id}}
-\newcommand{\colim}{\operatorname{colim}}
-\newcommand{\proj}{\operatorname{Proj}}
-\newcommand{\GL}{\operatorname{GL}}
-\newcommand{\SL}{\operatorname{SL}}
-\newcommand{\Gr}{\operatorname{Gr}}
-\newcommand{\divisor}{\operatorname{div}}
-\newcommand{\OO}{\mathcal{O}}
-\newcommand{\pic}{\operatorname{Pic}}
-\newcommand{\Div}{\operatorname{Div}}
-\newcommand{\PrDiv}{\operatorname{PrDiv}}
-\newcommand{\Alg}{\operatorname{Alg}}
-\newcommand{\Mod}{\operatorname{Mod}}
-\newcommand{\coker}{\operatorname{coker}}
-\newcommand{\gl}{\mathfrak{gl}}
-\renewcommand{\sl}{\mathfrak{sl}}
-\newcommand{\acts}{\curvearrowright}
-\newcommand{\Lie}{\operatorname{Lie}}
-\newcommand{\Ad}{\operatorname{Ad}}
-\newcommand{\ad}{\operatorname{ad}}
-\newcommand{\Fl}{\operatorname{Fl}}
-\newcommand{\Aut}{\operatorname{Aut}}
-\newcommand{\res}{\operatorname{res}}
-\newcommand{\ord}{\operatorname{ord}}
-\newcommand{\Higgs}{\operatorname{Higgs}}
-\newcommand{\Gal}{\operatorname{Gal}}
-\newcommand{\p}{\mathfrak{p}}
-\newcommand{\q}{\mathfrak{q}}
-\renewcommand{\a}{\mathfrak{a}}
-\newcommand{\vol}{\operatorname{vol}}
-\renewcommand{\L}{\mathcal{L}}
-\newcommand{\legendre}[2]{\genfrac{(}{)}{}{}{#1}{#2}}
-\newcommand{\Cl}{\operatorname{Cl}}
-\newcommand{\Supp}{\operatorname{Supp}}
-\renewcommand{\div}{\operatorname{div}}
-\newcommand{\codim}{\operatorname{codim}}
+%Bibliography setup
+\defbibheading{bibliography}[\bibname]{%
+\section*{#1}%
+\markboth{#1}{#1}}
+\renewcommand{\cite}{\autocite} 
 
 
 %Color Scheme
@@ -126,7 +50,7 @@
 \tcbuselibrary{breakable}
 \tcbuselibrary{theorems}
 
-\g@addto@macro\bfseries{\boldmath} %math is in bold when surrounding text is in bold. for theorem labels.
+\g@addto@macro\bfseries{\boldmath} %math is in bold when surrounding text is in bold, for theorem labels.
 
 \newtcbtheorem[number within=subsection,
     %number freestyle={\noexpand\thesection.\noexpand\thesubsection.\noexpand\Roman{\tcbcounter}} %for use with revtex
@@ -150,7 +74,7 @@
 %need to define definition environment manually first so there's something to set the counter from for everything else
 
 \newcommand{\wraptheorem}[4]{%
-    \newtcbtheorem[use counter from=olddefinition]{old#1}{\vphantom{Apgjy}#2}{breakable, %the \vphantom is to make the boxes all the same size, as long as you don't use the character Å or something
+    \newtcbtheorem[use counter from=olddefinition]{old#1}{\vphantom{Apgjy}#2}{breakable, %the \vphantom is to make the label border boxes all the same size, as long as you don't use the character Å or something
     parbox=false,
     sharp corners, 
     skin=enhanced, 
@@ -169,7 +93,7 @@
 
     \NewDocumentEnvironment{#1*}{O{} O{}}
     {\parindent = 0pt
-    \begin{old#1*}{##1}} {\end{old#1*}}%extends the wraptheorem function to include the starred (unnumbered) versions of the new theorem styles that are automatically created by the tcolorbox package
+    \begin{old#1*}{##1}} {\end{old#1*}} %extends the wraptheorem function to include the starred (unnumbered) versions of the new theorem styles that are automatically created by the tcolorbox package
 }
 
 %\wraptheorem{environment name}{word that is displayed at top of env}{color}{abbreviation for ref}
@@ -183,11 +107,13 @@
 \wraptheorem{remark}{Remark}{Main}{rem}
 \wraptheorem{conjecture}{Conjecture}{Main}{conj}
 \wraptheorem{question}{Question}{Accent1}{q}
+\wraptheorem{counterexample}{Counterexample}{Accent2}{counterex}
+
 % Use case:
 % \begin{definition}[What is to be defined][label]
 % ---
 % \end{definition}
-% ~\ref{def:label}
+% In Definition~\ref{def:label}, we defined
 
 \let\oldmarginnote\marginnote
 \renewcommand{\marginnote}[1]{\oldmarginnote{\parindent=0pt \parskip=7pt #1}} %no paragraph indents in marginnotes
@@ -250,18 +176,6 @@
     \oldauthor{#1}%
 }
 
-% Headings
-\newcommand\setfancyhdr{%
-    \pagestyle{fancy}%
-    \fancyhead%
-    \fancyfoot%
-    \lhead{\scshape\thetitle}%
-    \chead{}%
-    \rhead{\scshape\theauthor}%
-    \lfoot{}%
-    \cfoot{\thepage}%
-    \rfoot{}%
-}
 
 \let\oldmaketitle\maketitle
 \renewcommand\maketitle{\sffamily\oldmaketitle\rmfamily}
@@ -275,6 +189,8 @@
 
 \setlength{\fboxrule}{.5mm} %resize framebox thickness to theorem box frame thickness (more consistent design language), default is .2pt
 \renewcommand{\chapter}[1]{%format adapted from template for lecture notes from CS 267, Applications of Parallel Computing, UC Berkeley EECS department
+    \def\chaptername{#1} %save chapter name to a variable we can access for setting header in \talkmode
+
     \newpage
     \noindent
     \begin{center}
@@ -295,13 +211,15 @@
 
 \newenvironment{twocol}{\begin{fullwidth}\begin{multicols}{2}}{\end{multicols}\end{fullwidth}} %new twocolumn fullwidth environment, mostly for spamming a bunch of examples after a theorem or something like that, since the margins generally don't get used when we're doing a bunch of examples in a row
 
-\makeatletter %left margin proof environment
-\newtheoremstyle{proof}%
+%%% deprecated because the environment will insert and delete paragraph breaks in order to try to balance the columns, which is extremely undesirable, see https://github.com/T-F-S/tcolorbox/issues/244, https://github.com/T-F-S/tcolorbox/issues/245, and https://tex.stackexchange.com/questions/695327/tcolorbox-multicols-tufte-book-inserting-unwanted-paragraph-breaks
+
+\makeatletter %left margin proof environment; the "Proof:" start of a proof lives in the left margin
+\newtheoremstyle{proof}
 {\item[\theorem@headerfont \llap{##1 \theorem@separator}]}%
 {\item[\theorem@headerfont \llap{##3 \theorem@separator}]}%opt-head, so if you do \begin{proof}[foo] the Proof: is replaced with foo:
 \makeatother
 
-% \renewenvironment{proof}{\par\textbf{Proof:}}{\hfill\ensuremath{\blacksquare} \par} %old hacky proof environment; switching to ntheorem gives better alignment of \blacksquare, especially when the proof ends with a displayed formula; unfortunately, this means you have to bend the knee to the tex.stackexchange gestapo and replace your $$ $$s with \[ \]s (anticipate ~five fewer usable years for your right pinky)
+\newcommand{\bmn}[1]{\marginnote{\fbox{\parbox{\marginparwidth}{#1}}}} %boxed margin note
 
 \theoremstyle{proof}
 \theoremheaderfont{\sc \large}
@@ -309,3 +227,43 @@
 \theoremseparator{:}
 \theoremsymbol{\ensuremath{\blacksquare}}
 \newtheorem{proof}{Proof}
+
+\newcommand{\talkmode}{ %redoing numbering and headers for writing talk notes that don't need multiple chapters
+    \renewcommand\thesection{\arabic{section}} %suppresses chapter number in theorem labels
+    %%% redefine header to use chapter title instead of "actual" title (which, for talks, I generally use to write the name of the seminar that I gave the talk in)
+    \fancyhf{} % clear header and footer fields
+    \ifthenelse{\boolean{@tufte@twoside}}
+      {\fancyhead[LE]{\thepage\quad\smallcaps{\newlinetospace{\plainauthor}}}%
+        \fancyhead[RO]{\smallcaps{\newlinetospace{\chaptername}}\quad\thepage}}
+      {\fancyhead[RE,RO]{\smallcaps{\newlinetospace{\plaintitle}}\quad\thepage}}
+}
+
+
+%My shortcuts and commands
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\re}{\operatorname{Re}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\g}{\mathfrak{g}}
+\newcommand{\spec}{\operatorname{Spec}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Tor}{\operatorname{Tor}}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\Gr}{\operatorname{Gr}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\gl}{\mathfrak{gl}}
+\renewcommand{\sl}{\mathfrak{sl}}
+\newcommand{\acts}{\curvearrowright}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\legendre}[2]{\genfrac{(}{)}{}{}{#1}{#2}}
+\newcommand{\codim}{\operatorname{codim}}

@@ -5,3 +5,5 @@
 *.out
 *.log
 *.thm
+*.xml
+*.bcf

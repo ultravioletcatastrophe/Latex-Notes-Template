@@ -1,9 +1,10 @@
-\documentclass[justified, nofonts, notitlepage, openany, debug]{tufte-book}
+\documentclass[justified, nofonts, notitlepage, openany, debug, nobib]{tufte-book}
 
 %%% Sets numbering depth to section level (e.g, no numbered subsections)
 \setcounter{secnumdepth}{1}
 
 \usepackage{notes}
+\addbibresource{references.bib}
 \geometry{left=1in, right=3in,top = 1in, bottom=1in}
 
 %%% Removes paragraph indentation and changes paragraph line skip
@@ -17,20 +18,23 @@
 \@tufte@reset@par
 \makeatother
 
-\def\bibsection{\section*{\refname}} %ensures that the references show up as an unnumbered section
+\talkmode %if you only need one chapter, use \talkmode which fixes theorem numberings (omits chapter #) and uses the chapter title instead of the title itself in headers (for talk notes I tend to use \title for the name of the seminar I gave the talk in)
 
 \begin{document}
 %%% The Title and Author only need to be set once at the start of the document. If you take notes for multiple courses in the same document (for example, in a multi-semester sequence for the same course), you can separate the courses with a new Part, and the semester, lecturer, and course only need to be set once at the start of the new course.
 \title{Math 256C: From Schemes to Conspiracies}
 \author{Abhishek Shivkumar}
 
-\part{Non-Riemannian Hypersquares}
+% \part{Non-Riemannian Hypersquares}
 \semester{Fall 2020}
 \lecturer{Professor Alexander Grothendieck}
 
-\chapter{Lecture 1: 26 August}
+\chapter{Chapter I: Points with Endomorphisms}
 \section{Tutorial}
 \subsection{Basics}
+
+\bmn{Lecture 1: September 3$^\text{rd}$, 1752}
+I tend to use chapter headings for larger sections of a course (as opposed to individual lectures); to keep track of where lectures start you can use the \texttt{bmn} (boxed margin note) command, which writes to the margin.
 
 Here is where lecture content goes, generally a summary or transcription of what is being said or written. Here is a theorem:
 \begin{theorem}[Kontsevich]
@@ -53,40 +57,40 @@ You can insert a hyperlinked reference for any theorem box if you add a referenc
     There is also a proof environment; the proof heading is configured to live in the left margin.
 \end{proof}
 
-Citations live in the right margin\cite{hartshorne}, but will not work correctly if placed inside a theorem box. The available theorem boxes are \texttt{theorem}, \texttt{lemma}, \texttt{corollary}, \texttt{proposition}, \texttt{definition}, \texttt{example}, \texttt{remark}, \texttt{question}, \texttt{exercise}, and \texttt{conjecture}. Unnnumbered versions of all the theorem boxes exist:
+Citations live in the right margin\cite[232]{fantechi}, but will not work correctly if placed inside a theorem box. Repeated citations appear as ibid\cite{fantechi}. The available theorem boxes are \texttt{theorem}, \texttt{lemma}, \texttt{corollary}, \texttt{proposition}, \texttt{definition}, \texttt{example}, \texttt{remark}, \texttt{question}, \texttt{exercise}, \texttt{counterexample}, and \texttt{conjecture}. Unnnumbered versions of all the theorem boxes exist:
 \begin{proposition*}[Hurwitz]
     The group of orientation-preserving conformal automorphisms of a compact Riemann surface of genus $g > 1$ has order at most $84(g-1)$.
 \end{proposition*}
 \marginnote{References do not work for unnumbered theorems.}
 
-\subsection{Advanced}
-\marginnote{Theorem box numbering is not affected by subsection; this is set by \texttt{secnumdepth} at the top of the preamble.}
-Using \texttt{https://q.uiver.app/} (whose style file is included in our style file for convenience), we can curve arrows more flexibly in commutative diagrams than \texttt{tikz-cd} normally allows:
-\[\begin{tikzcd}
-    & {\PP^n \setminus \{Q\}} & {W_0} \\
-    X & {\PP^n \setminus V} & {W_0\setminus V'} & W
-    \arrow["{\varphi_0}", from=1-2, to=1-3]
-    \arrow[from=2-2, to=1-2]
-    \arrow["{\varphi_0|_{\PP^n \setminus V}}", from=2-2, to=2-3]
-    \arrow["{\varphi'}", from=2-3, to=2-4]
-    \arrow[hook, from=2-1, to=1-2]
-    \arrow[hook, from=2-1, to=2-2]
-    \arrow[hook, from=2-3, to=1-3]
-    \arrow["\varphi"', curve={height=12pt}, from=2-1, to=2-4]
-\end{tikzcd}\]
+% \subsection{Advanced}
+% \marginnote{Theorem box numbering is not affected by subsection; this is set by \texttt{secnumdepth} at the top of the preamble.}
+% Using \texttt{https://q.uiver.app/}, we can curve arrows more flexibly in commutative diagrams than \texttt{tikz-cd} normally allows:
+% \[\begin{tikzcd}
+%     & {\PP^n \setminus \{Q\}} & {W_0} \\
+%     X & {\PP^n \setminus V} & {W_0\setminus V'} & W
+%     \arrow["{\varphi_0}", from=1-2, to=1-3]
+%     \arrow[from=2-2, to=1-2]
+%     \arrow["{\varphi_0|_{\PP^n \setminus V}}", from=2-2, to=2-3]
+%     \arrow["{\varphi'}", from=2-3, to=2-4]
+%     \arrow[hook, from=2-1, to=1-2]
+%     \arrow[hook, from=2-1, to=2-2]
+%     \arrow[hook, from=2-3, to=1-3]
+%     \arrow["\varphi"', curve={height=12pt}, from=2-1, to=2-4]
+% \end{tikzcd}\]
 
-Finally, there is (in addition to the default environments provided by \texttt{tufte-book}) a two-column environment, which I mostly use to spam examples after a big theorem:
-\begin{twocol}
-\begin{example}
-    In $\CC \PP^2$ with its canonical orientation as a complex manifold, we have $H^2 = H_2 = \ZZ$. Lines $L$ in $\CC \PP^2$ are embedded copies of $\CC \PP^1 = S^2$, with a single fundamental class $[L] \in H_2$ representing any such line. To compute the self-intersection $[L] \cdot [L]$, choose two representatives $L$ and $L'$ which intersect transversely (in a point, by basic intersection theory); since $\CC \PP^1$ is canonically oriented as well, and the orientations of $L$ and $L'$ agree with that of $\CC \PP^2$ (since they are subspaces of $\CC \PP^2$), we have that $[L] \cdot [L] = 1$. 
-\end{example}
-\begin{example}
-    In $S^2 \times S^2$, the second homology group is $\ZZ^2$, generated by $h = [S^2 \times \{x\}]$ and $v = [\{x\} \times S^2]$. $S^2 \times \{x\}$ and $\{x\} \times S^2$ intersect transversely at $(x,x)$, and, regarding $S^2$ with its canonical orientation as a complex manifold ($\CC \PP^1$), the orientations agree to give $h \cdot v = 1$. To compute $h \cdot h$, intersect representatives $S^2 \times \{x\}$ and $S^2 \times \{y\}$ for $x \neq y$, from which it is set-theoretically clear that $h^2 = 0$ (and similarly for $v$). Thus, the intersection form as a matrix in the basis $(h,v)$ can be written as $\begin{psmallmatrix} 0 & 1 \\ 1 & 0 \end{psmallmatrix}$ This intersection form is therefore \textit{even}, meaning that for any $k = ah+bv$, $k \cdot k = 2ab$ is even.
-\end{example}
-\end{twocol}
+% Finally, there is (in addition to the default environments provided by \texttt{tufte-book}) a two-column environment, which I mostly use to spam examples after a big theorem:
+% \begin{twocol}
+% \begin{example}
+%     In $\CC \PP^2$ with its canonical orientation as a complex manifold, we have $H^2 = H_2 = \ZZ$. Lines $L$ in $\CC \PP^2$ are embedded copies of $\CC \PP^1 = S^2$, with a single fundamental class $[L] \in H_2$ representing any such line. To compute the self-intersection $[L] \cdot [L]$, choose two representatives $L$ and $L'$ which intersect transversely (in a point, by basic intersection theory); since $\CC \PP^1$ is canonically oriented as well, and the orientations of $L$ and $L'$ agree with that of $\CC \PP^2$ (since they are subspaces of $\CC \PP^2$), we have that $[L] \cdot [L] = 1$. 
+% \end{example}
+% \begin{example}
+%     In $S^2 \times S^2$, the second homology group is $\ZZ^2$, generated by $h = [S^2 \times \{x\}]$ and $v = [\{x\} \times S^2]$. $S^2 \times \{x\}$ and $\{x\} \times S^2$ intersect transversely at $(x,x)$, and, regarding $S^2$ with its canonical orientation as a complex manifold ($\CC \PP^1$), the orientations agree to give $h \cdot v = 1$. To compute $h \cdot h$, intersect representatives $S^2 \times \{x\}$ and $S^2 \times \{y\}$ for $x \neq y$, from which it is set-theoretically clear that $h^2 = 0$ (and similarly for $v$). Thus, the intersection form as a matrix in the basis $(h,v)$ can be written as $\begin{psmallmatrix} 0 & 1 \\ 1 & 0 \end{psmallmatrix}$ This intersection form is therefore \textit{even}, meaning that for any $k = ah+bv$, $k \cdot k = 2ab$ is even.
+% \end{example}
+% \end{twocol}
+
+%%% Removed as use of this environment can often cause the insertion of unwanted paragraph breaks, see https://tex.stackexchange.com/questions/695327/tcolorbox-multicols-tufte-book-inserting-unwanted-paragraph-breaks, https://github.com/T-F-S/tcolorbox/issues/244, https://github.com/T-F-S/tcolorbox/issues/245. Seems unfixable.
 
 \nocite{*} %Print all references, even those never cited in the body
-
-\bibliographystyle{abbrvnat}
-\bibliography{sample}
+\printbibliography[title=References]
 \end{document}
