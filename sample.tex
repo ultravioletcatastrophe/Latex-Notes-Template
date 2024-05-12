@@ -37,7 +37,7 @@
 I tend to use chapter headings for larger sections of a course (as opposed to individual lectures); to keep track of where lectures start you can use the \texttt{bmn} (boxed margin note) command, which writes to the margin.
 
 Here is where lecture content goes, generally a summary or transcription of what is being said or written. Here is a theorem:
-\begin{theorem}[Kontsevich]
+\begin{theorem}[Kontsevich][][kontsevich-manin]
     The number $N_d$ of rational plane curves of degree $d$ passing through $3d-1$ points in general position is given recursively by $$N_d = \sum_{d_A + d_B = d} N_{d_A} N_{d_B} d_A^2 d_B\left(d_B\binom{3d-4}{3d_A -2} - d_A \binom{3d-4}{3d_A-1}\right)$$
 \end{theorem}
 \marginnote{Here is a margin note: I use these generally to annotate my own thoughts or questions during lecture.
@@ -48,20 +48,36 @@ The above result, is, of course, thoroughly unrelated to the following fact:
 \begin{lemma}
     In a $k$-free graph on $n$ vertices, there are at most $\binom{k-1}{r} (\frac{n}{k-1})^r$ $r$-cliques.
 \end{lemma}
-Setting $r=2$ in the above, we recover the following result:
-\begin{corollary}[Turan's Theorem][hereyouputthetagforreferences]
+Setting $r=2$ in the above, we recover the following result:\sidenote{There are also numbered sidenotes.}
+\begin{corollary}[Turan's Theorem][turan]
     In a $k$-free graph on $n$ vertices, there are at most $\frac{k-2}{k-1} \frac{n^2}{2}$ edges. 
 \end{corollary}
-You can insert a hyperlinked reference for any theorem box if you add a reference tag (see the \LaTeX\ code at Corollary~\ref{cor:hereyouputthetagforreferences} for formatting, and see the style file for the reference prefixes for each theorem style).
+You can insert a hyperlinked reference for any theorem box if you add a reference tag (see formatting below), e.g, \verb_Corollary_$\sim$\verb_\ref{cor:turan}_ becomes Corollary~\ref{cor:turan} (see the style file for the reference prefixes for each theorem style).
 \begin{proof}
     There is also a proof environment; the proof heading is configured to live in the left margin.
 \end{proof}
 
-Citations live in the right margin\cite[232]{fantechi}, but will not work correctly if placed inside a theorem box. Repeated citations appear as ibid\cite{fantechi}. The available theorem boxes are \texttt{theorem}, \texttt{lemma}, \texttt{corollary}, \texttt{proposition}, \texttt{definition}, \texttt{example}, \texttt{remark}, \texttt{question}, \texttt{exercise}, \texttt{counterexample}, and \texttt{conjecture}. Unnnumbered versions of all the theorem boxes exist:
-\begin{proposition*}[Hurwitz]
+Citations live in the right margin\cite[232]{fantechi}. Repeated citations appear as Ibid\cite{fantechi}. The available theorem boxes are \texttt{theorem}, \texttt{lemma}, \texttt{corollary}, \texttt{proposition}, \texttt{definition}, \texttt{example}, \texttt{remark}, \texttt{question}, \texttt{exercise}, \texttt{counterexample}, and \texttt{conjecture}. 
+
+Unnnumbered versions of all the theorem boxes exist:
+
+\begin{proposition*}[Hurwitz][fantechi,hartshorne]
     The group of orientation-preserving conformal automorphisms of a compact Riemann surface of genus $g > 1$ has order at most $84(g-1)$.
 \end{proposition*}
-\marginnote{References do not work for unnumbered theorems.}
+\marginnote{For obvious reasons, internal references do not work for unnumbered theorems.}
+
+Formatting for a theorem box is as follows:
+\begin{verbatim}
+\begin{theorem}[<theorem name/author>]%
+    [<optional tag for references>]%
+    [<optional citation keys/tags (comma separated) for this theorem>]
+
+    ... <theorem statement goes here> ...
+\end{theorem}
+\end{verbatim}
+The above is the \textit{only} way to use citations inside one of the supplied theorem environments due to some incompatbilities between the \texttt{tcolorbox} package and the \texttt{tufte-book} class. Numbered sidenotes do not work inside theorem boxes, unnumbered marginnotes often work fine.
+
+
 %Unfortunately, citations also do not work inside the tcolorboxes, see https://github.com/T-F-S/tcolorbox/issues/192
 
 % \subsection{Advanced}

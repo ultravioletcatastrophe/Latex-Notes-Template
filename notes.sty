@@ -21,7 +21,7 @@
 \RequirePackage{xparse}
 \RequirePackage{changepage}
 \RequirePackage{multicol}
-\RequirePackage{marginfix} %moves marginnotes around so that they don't go off page. in the past this had some bad interactions with \cite
+% \RequirePackage{marginfix} %moves marginnotes around so that they don't go off page. in the past this had some bad interactions with \cite
 \RequirePackage{longtable} %allows tables to break across pages
 \RequirePackage[amsmath, thmmarks]{ntheorem}
 \RequirePackage{dynkin-diagrams}
@@ -35,8 +35,11 @@
 \defbibheading{bibliography}[\bibname]{%
 \section*{#1}%
 \markboth{#1}{#1}}
+\let\oldcite\cite %save the default \cite behavior so that you can still access the raw text that \cite generates. used for defining citation workaround for theorem boxes
+\newcommand{\handcite}{\bibsentence\oldcite} %\bibsentence enforces first letter capitalization in the citation text
 \renewcommand{\cite}{\autocite} 
 
+\g@addto@macro\bfseries{\boldmath} %math is in bold when surrounding text is in bold, for theorem labels.
 
 %Color Scheme
 \definecolor{Main}{HTML}{BF5700}
@@ -49,8 +52,6 @@
 \tcbuselibrary{skins}
 \tcbuselibrary{breakable}
 \tcbuselibrary{theorems}
-
-\g@addto@macro\bfseries{\boldmath} %math is in bold when surrounding text is in bold, for theorem labels.
 
 \newtcbtheorem[number within=subsection,
     %number freestyle={\noexpand\thesection.\noexpand\thesubsection.\noexpand\Roman{\tcbcounter}} %for use with revtex
@@ -68,9 +69,19 @@
     borderline={.5mm}{0mm}{Accent2},
     fonttitle=\bfseries}{def}
 
-\NewDocumentEnvironment{definition}{O{} O{}}
+\NewDocumentEnvironment{definition}{O{} O{} o}
     {\parindent = 0pt
-    \begin{olddefinition}{#1}{#2}} {\end{olddefinition}}
+    \IfNoValueTF{#3}{
+    \begin{olddefinition}{#1}{#2}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{#3}}\begin{olddefinition}{#1$^{\arabic{footnote}}$}{#2}}}
+    %manually place superscript for citation and place citation in the margin at hopefully the right place.
+    {\end{olddefinition}}
+\NewDocumentEnvironment{definition*}{O{} o}
+    {\parindent = 0pt
+    \IfNoValueTF{#2}{
+    \begin{olddefinition*}{#1}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{#2}}\begin{olddefinition*}{#1$^{\arabic{footnote}}$}}}
+    {\end{olddefinition*}}
 %need to define definition environment manually first so there's something to set the counter from for everything else
 
 \newcommand{\wraptheorem}[4]{%
@@ -87,13 +98,19 @@
     borderline={.5mm}{0mm}{#3},
     fonttitle=\bfseries
     }{#4}
-    \NewDocumentEnvironment{#1}{O{} O{}}
+    \NewDocumentEnvironment{#1}{O{} O{} o}
     {\parindent = 0pt
-    \begin{old#1}{##1}{##2}} {\end{old#1}}
+    \IfNoValueTF{##3}{
+    \begin{old#1}{##1}{##2}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{##3}}\begin{old#1}{##1$^{\arabic{footnote}}$}{##2}}}
+    {\end{old#1}}
 
-    \NewDocumentEnvironment{#1*}{O{} O{}}
+    \NewDocumentEnvironment{#1*}{O{} o}
     {\parindent = 0pt
-    \begin{old#1*}{##1}} {\end{old#1*}} %extends the wraptheorem function to include the starred (unnumbered) versions of the new theorem styles that are automatically created by the tcolorbox package
+    \IfNoValueTF{##2}{
+    \begin{old#1*}{##1}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{##2}}\begin{old#1*}{##1$^{\arabic{footnote}}$}}}
+    {\end{old#1*}} %extends the wraptheorem function to include the starred (unnumbered) versions of the new theorem styles that are automatically created by the tcolorbox package
 }
 
 %\wraptheorem{environment name}{word that is displayed at top of env}{color}{abbreviation for ref}
@@ -115,8 +132,17 @@
 % \end{definition}
 % In Definition~\ref{def:label}, we defined
 
-\let\oldmarginnote\marginnote
-\renewcommand{\marginnote}[1]{\oldmarginnote{\parindent=0pt \parskip=7pt #1}} %no paragraph indents in marginnotes
+\renewcommand\marginnote[2][0pt]{%
+  \ifthenelse{\boolean{@tufte@loadnatbib}}{%
+    \let\cite\@tufte@infootnote@cite%   use the in-sidenote \cite command
+  }{}%
+  \gdef\@tufte@citations{}%           clear out any old citations
+  \marginpar{\hbox{}\vspace*{#1}\@tufte@marginnote@font\@tufte@marginnote@justification\@tufte@margin@par\vspace*{-1\baselineskip}\noindent \parindent=0pt \parskip=7pt #2}%
+  \@tufte@print@citations%            print any citations
+  \ifthenelse{\boolean{@tufte@loadnatbib}}{%
+    \let\cite\@tufte@normal@cite%       go back to using normal in-text \cite command
+  }{}%
+}
 
 % Section Titles
 \let\oldsection\section
