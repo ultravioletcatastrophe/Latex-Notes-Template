@@ -27,7 +27,14 @@
 \RequirePackage{dynkin-diagrams}
 \RequirePackage{quiver}
 \RequirePackage{hyphenat} %hyphenation
-\RequirePackage[style=authortitle-ibid,autocite=footnote,backend=biber]{biblatex}
+\RequirePackage[style=authortitle-ibid,
+                autocite=footnote,
+                backend=biber
+                ,maxnames=1000,
+                isbn=false,
+                doi=false,
+                ]{biblatex}
+        \DeclareNameAlias{sortname}{given-family} %prevents first author being given as lastname, firstname, with subsequent authors given as Firstname Lastname, which is the ordinary biblatex authortitle behavior for some reason
 \RequirePackage[graphicx]{realboxes}
 \RequirePackage{adjustbox}
 % the three packages below are used for importing figures created in Inkscape, as in https://castel.dev/post/lecture-notes-2/
@@ -35,6 +42,10 @@
 \RequirePackage{pdfpages}
 \RequirePackage{transparent}
 
+\newcommand{\incfig}[1]{% also due to castel.dev
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
 %Bibliography setup
 \defbibheading{bibliography}[\bibname]{%
 \section*{#1}%
@@ -73,18 +84,19 @@
     borderline={.5mm}{0mm}{Accent2},
     fonttitle=\bfseries}{def}
 
-\NewDocumentEnvironment{definition}{O{} O{} o}
+\NewDocumentEnvironment{definition}{O{} O{} o O{}}
     {\parindent = 0pt
     \IfNoValueTF{#3}{
     \begin{olddefinition}{#1}{#2}}
-    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{#3}}\begin{olddefinition}{#1$^{\arabic{footnote}}$}{#2}}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite[#4]{#3}}\begin{olddefinition}{#1$^{\arabic{footnote}}$}{#2}}}
     %manually place superscript for citation and place citation in the margin at hopefully the right place.
+    %third argument is for the citation itself, fourth is for page/entry within citation (e.g Corollary 4.33)
     {\end{olddefinition}}
-\NewDocumentEnvironment{definition*}{O{} o}
+\NewDocumentEnvironment{definition*}{O{} o O{}}
     {\parindent = 0pt
     \IfNoValueTF{#2}{
     \begin{olddefinition*}{#1}}
-    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{#2}}\begin{olddefinition*}{#1$^{\arabic{footnote}}$}}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite[#3]{#2}}\begin{olddefinition*}{#1$^{\arabic{footnote}}$}}}
     {\end{olddefinition*}}
 %need to define definition environment manually first so there's something to set the counter from for everything else
 
@@ -102,18 +114,18 @@
     borderline={.5mm}{0mm}{#3},
     fonttitle=\bfseries
     }{#4}
-    \NewDocumentEnvironment{#1}{O{} O{} o}
+    \NewDocumentEnvironment{#1}{O{} O{} o O{}}
     {\parindent = 0pt
     \IfNoValueTF{##3}{
     \begin{old#1}{##1}{##2}}
-    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{##3}}\begin{old#1}{##1$^{\arabic{footnote}}$}{##2}}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite[##4]{##3}}\begin{old#1}{##1$^{\arabic{footnote}}$}{##2}}}
     {\end{old#1}}
 
-    \NewDocumentEnvironment{#1*}{O{} o}
+    \NewDocumentEnvironment{#1*}{O{} o O{}}
     {\parindent = 0pt
     \IfNoValueTF{##2}{
     \begin{old#1*}{##1}}
-    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite{##2}}\begin{old#1*}{##1$^{\arabic{footnote}}$}}}
+    {\stepcounter{footnote}\marginnote[.9cm]{$^{\arabic{footnote}}$\,\handcite[##3]{##2}}\begin{old#1*}{##1$^{\arabic{footnote}}$}}}
     {\end{old#1*}} %extends the wraptheorem function to include the starred (unnumbered) versions of the new theorem styles that are automatically created by the tcolorbox package
 }
 
@@ -131,10 +143,12 @@
 \wraptheorem{counterexample}{Counterexample}{Accent2}{counterex}
 
 % Use case:
-% \begin{definition}[What is to be defined][label]
+% \begin{definition}[What is to be defined][label][citation][within citation]
 % ---
 % \end{definition}
 % In Definition~\ref{def:label}, we defined
+
+%latter two optargs function as inserting a \cite[within citaiton]{citation} slightly above the theorem box
 
 \renewcommand\marginnote[2][0pt]{%
   \ifthenelse{\boolean{@tufte@loadnatbib}}{%
@@ -260,6 +274,7 @@
 
 \newcommand{\talkmode}{ %redoing numbering and headers for writing talk notes that don't need multiple chapters
     \renewcommand\thesection{\arabic{section}} %suppresses chapter number in theorem labels
+    \renewcommand\thefigure{\arabic{figure}} %suppresses section number in the figure label
     %%% redefine header to use chapter title instead of "actual" title (which, for talks, I generally use to write the name of the seminar that I gave the talk in)
     \fancyhf{} % clear header and footer fields
     \ifthenelse{\boolean{@tufte@twoside}}
